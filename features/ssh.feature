@@ -2,17 +2,34 @@ Feature: ssh
 
   Discription: Perform a connection to remote machine via ssh
 
+  Background:
 
-  Scenario: Connection
-
-    Given the remote host 79.143.35.147 is provided
-
-    When the command is performed
+    Given the uptime command is provided
     """
-    cp /dev/null tmp.log
-    pwd >> tmp.log
-    date >> tmp.log
-    ls -alh >> tmp.log
+    awk '{print $1}' /proc/uptime
+    """
+    And the check command is provided
+    """
+    echo $?
+    """
+    And the ssh connection is established
+
+
+  Scenario: Reboot remote machine
+
+    Given the reboot command is provided
+    """
+    (sleep 5; reboot) &
     """
 
-    Then the ssh connection is Ok
+    When the reboot command is processed
+    And check
+
+#    Then the command status should be 0
+#    And the last time reboot of system should be less than 60 seconds
+
+#    Given start
+#
+#    When todo
+#
+#    Then finish
