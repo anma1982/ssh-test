@@ -28,14 +28,11 @@ class Utils:
             print("\nAuthentication failed, please verify your credentials")
             result_flag = False
         except paramiko.SSHException as sshException:
-            print("\nCould not establish SSH connection: %s" % sshException)
             result_flag = False
         except socket.timeout as e:
             print("\nConnection timed out")
             result_flag = False
         except Exception as e:
-            print('\nException in connecting to the server')
-            print('PYTHON SAYS:', e)
             result_flag = False
             Repo().client.close()
         else:
@@ -46,7 +43,6 @@ class Utils:
         Repo.ssh_output = None
         result_flag = True
         try:
-            print("\nExecuting command:\n{}".format(command))
             stdin, stdout, stderr = Repo.client.exec_command(command, Conf.TIMEOUT)
             Repo.ssh_output = stdout.read()
             Repo.ssh_error = stderr.read()
@@ -54,9 +50,6 @@ class Utils:
                 print("\nProblem occurred while running command:\n{}".format(command))
                 print("\nThe error is: \n{}".format(Repo.ssh_error))
                 result_flag = False
-            else:
-                print("\nCommand execution completed successfully:\n{}".format(command))
-                # Repo.client.close()
         except socket.timeout as e:
             print("\nCommand timed out\n{}".format(Repo.client.close(), result_flag=False))
         except paramiko.SSHException:
@@ -68,7 +61,6 @@ class Utils:
         Repo.ssh_output = None
         result_flag = True
         try:
-            print("\nExecuting command:\n{}".format(command))
             stdin, stdout, stderr = Repo.client.exec_command(command, Conf.TIMEOUT)
             Repo.ssh_output = stdout.read()
             Repo.ssh_error = stderr.read()
@@ -77,7 +69,6 @@ class Utils:
                 print("\nThe error is: \n{}".format(Repo.ssh_error))
                 result_flag = False
             else:
-                print("\nCommand execution completed successfully:\n{}".format(command))
                 Repo.client.close()
         except socket.timeout as e:
             print("\nCommand timed out\n{}".format(Repo.client.close(), result_flag=False))

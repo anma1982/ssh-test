@@ -3,7 +3,7 @@ This config file would have the credentials of remote server,
 the commands to execute, upload and download file path details.
 """
 #Server credential details needed for ssh
-HOST='192.168.1.101'
+HOST='10.0.0.114'
 USERNAME='root'
 PASSWORD='iddqd'
 PORT = 22
