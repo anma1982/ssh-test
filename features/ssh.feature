@@ -1,6 +1,6 @@
 Feature: POC
 
-  Discription: Perform a connection to remote machine via ssh
+  Description: Perform a connection to remote machine via ssh
 
   Background:
 

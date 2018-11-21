@@ -1,5 +1,6 @@
 import paramiko
-import os, sys
+import os
+import sys
 
 from Repo import Repo
 
@@ -39,6 +40,7 @@ class Utils:
             result_flag = True
         return result_flag
 
+    @staticmethod
     def execute_command(command):
         Repo.ssh_output = None
         result_flag = True
@@ -57,6 +59,7 @@ class Utils:
             result_flag = False
         return result_flag
 
+    @staticmethod
     def execute_reboot_command(command):
         Repo.ssh_output = None
         result_flag = True
@@ -76,41 +79,3 @@ class Utils:
             print("\nFailed to execute the command:\n{}\n{}".format(command, Repo.client.close()))
             result_flag = False
         return result_flag
-
-    # def upload_file(self, uploadlocalfilepath, uploadremotefilepath):
-    #     result_flag = True
-    #     try:
-    #         if self.connect:
-    #             ftp_client = Repo().client.open_sftp()
-    #             ftp_client.put(uploadlocalfilepath, uploadremotefilepath)
-    #             ftp_client.close()
-    #             # repo.client.close()
-    #         else:
-    #             print("Could not establish SSH connection")
-    #             result_flag = False
-    #     except Exception as e:
-    #         print("\nUnable to upload the file to the remote server:\n{}".format(uploadremotefilepath))
-    #         print("\nPYTHON SAYS:", e)
-    #         result_flag = False
-    #         ftp_client.close()
-    #         # repo.client.close()
-    #     return result_flag
-    #
-    # def download_file(self, downloadremotefilepath, downloadlocalfilepath):
-    #     result_flag = True
-    #     try:
-    #         if self.connect:
-    #             ftp_client = Repo().client.open_sftp()
-    #             ftp_client.get(downloadremotefilepath, downloadlocalfilepath)
-    #             ftp_client.close()
-    #             # repo.client.close()
-    #         else:
-    #             print("Could not establish SSH connection")
-    #             result_flag = False
-    #     except Exception as e:
-    #         print("\nUnable to download the file from the remote server:\n{}".format(downloadremotefilepath))
-    #         print("\nPYTHON SAYS:", e)
-    #         result_flag = False
-    #         ftp_client.close()
-    #         # repo.client.close()
-    #     return result_flag

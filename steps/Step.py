@@ -1,7 +1,5 @@
 import os
 import time
-from subprocess import Popen, PIPE
-
 from behave import *
 
 from Repo import Repo
@@ -38,28 +36,29 @@ def step_impl(context):
     os.system(Repo.reboot_command)
     count = 0
     status = True
+    replay_timeout = Conf.DELAY_TIMEOUT / 12
+    replay_count = Conf.DELAY_TIMEOUT / 3
     while (status):
-        if (Utils.connect()):
+        if Utils.connect():
             Utils.execute_command(Repo.uptime_command)
             Repo.result = float(Repo.ssh_output.decode("utf-8").rstrip("\n\r"))
-            if Repo.result > 60.00:
+            if Repo.result > Conf.DELAY_TIMEOUT:
                 Utils.execute_command(Repo.uptime_command)
                 Repo.result = Repo.ssh_output.decode("utf-8").rstrip("\n\r")
-                time.sleep(3)
+                time.sleep(replay_timeout)
                 continue
             else:
                 status = False
-                print("\n======================= The host {} connected again :) =======================".format(
-                    Conf.HOST))
+                print("\n==================== The host {} connected again :) ====================".format(Conf.HOST))
                 Utils.execute_command(Repo.uptime_command)
                 Repo.result = Repo.ssh_output.decode("utf-8").rstrip("\n\r")
         else:
-            if count > 30:
+            if count > replay_count:
                 print("The remote host {} is not reachable :(".format(Conf.HOST))
                 break
             else:
                 print("Still not connected...")
-                time.sleep(3)
+                time.sleep(replay_timeout)
                 count += 1
 
 
