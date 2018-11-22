@@ -1,5 +1,4 @@
 class Repo:
-
     result = None
     status = None
     reboot_command = None
