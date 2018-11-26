@@ -24,11 +24,6 @@ def step_impl(context):
     Repo.reboot_command = context.text
 
 
-@Given("the test command is provided")
-def step_impl(context):
-    Repo.command = context.text
-
-
 @When("the reboot command is processed")
 def step_impl(context):
     print("\nRebooting the {} host...".format(Conf.HOST))
@@ -36,8 +31,6 @@ def step_impl(context):
     os.system(Repo.reboot_command)
     count = 0
     status = True
-    replay_timeout = Conf.DELAY_TIMEOUT / 12
-    replay_count = Conf.DELAY_TIMEOUT / 3
     while (status):
         if Utils.connect():
             Utils.execute_command(Repo.uptime_command)
@@ -45,7 +38,7 @@ def step_impl(context):
             if Repo.result > Conf.DELAY_TIMEOUT:
                 Utils.execute_command(Repo.uptime_command)
                 Repo.result = Repo.ssh_output.decode("utf-8").rstrip("\n\r")
-                time.sleep(replay_timeout)
+                time.sleep(Conf.REPLAY_TIMEOUT)
                 continue
             else:
                 status = False
@@ -53,12 +46,12 @@ def step_impl(context):
                 Utils.execute_command(Repo.uptime_command)
                 Repo.result = Repo.ssh_output.decode("utf-8").rstrip("\n\r")
         else:
-            if count > replay_count:
+            if count > Conf.REPLAY_COUNT:
                 print("The remote host {} is not reachable :(".format(Conf.HOST))
                 break
             else:
                 print("Still not connected...")
-                time.sleep(replay_timeout)
+                time.sleep(Conf.REPLAY_TIMEOUT)
                 count += 1
 
 
