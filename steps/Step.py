@@ -16,7 +16,20 @@ def step_impl(context):
 
 @Given("the ssh connection is established")
 def step_impl(context):
-    Utils.connect()
+    count = 0
+    status = True
+    while (status):
+        if Utils.connect():
+            status = False
+        else:
+            if count < Conf.REPLAY_COUNT:
+                time.sleep(Conf.REPLAY_TIMEOUT)
+                count += 1
+                continue
+            else:
+                print("The remote host {} is not reachable :(".format(Conf.HOST))
+                assert False
+
 
 
 @Given("the reboot command is provided")
